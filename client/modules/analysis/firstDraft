@@ -1,0 +1,92 @@
+var matchFn = function(people) {
+  var compatabilityObj = {};
+  for (var personName in people) {
+    var person = people[personName];
+
+    for (var otherName in people) {
+      var other = people[otherName];
+      var compatability = 0;
+      var questions = person.questions;
+
+      if (personName !== otherName) {
+        for (var questionName in questions) {
+          var question = questions[questionName];
+          var otherQuestion = other.questions[questionName];
+          var factor = 0;
+
+          if (question.answer === otherQuestion.accep && question.accep === otherQuestion.answer){
+            factor = 2;
+          } else if (question.answer === otherQuestion.accep || question.accep === otherQuestion.answer){
+            factor = 1;
+          }
+
+          compatability +=(factor*question.weight*otherQuestion.weight)
+        }
+
+        compatabilityObj[personName] = compatabilityObj[personName] || {};
+        compatabilityObj[personName][otherName] = (compatability/(2*Object.keys(questions).length))*100;
+      }
+    }
+  }
+  return compatabilityObj;
+};
+
+var people = {
+  person1: {
+    questions: {
+      question1: {
+        answer: 1,
+        accep: 2,
+        weight: 0.5
+      },
+      question2: {
+        answer: 2,
+        accep: 1,
+        weight: 1
+      },
+      question3: {
+        answer: 3,
+        accep: 3,
+        weight: 1
+      }
+    }
+  },
+  person2: {
+    questions: {
+      question1: {
+        answer: 2,
+        accep: 3,
+        weight: 1
+      },
+      question2: {
+        answer: 1,
+        accep: 2,
+        weight: 1
+      },
+      question3: {
+        answer: 2,
+        accep: 3,
+        weight: 0.5
+      }
+    }
+  },
+  person3: {
+    questions: {
+      question1: {
+        answer: 1,
+        accep: 1,
+        weight: 1
+      },
+      question2: {
+        answer: 2,
+        accep: 1,
+        weight: 0.5
+      },
+      question3: {
+        answer: 3,
+        accep: 1,
+        weight: 0.5
+      }
+    }
+  }
+}
